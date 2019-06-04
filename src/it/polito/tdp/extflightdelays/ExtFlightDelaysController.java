@@ -80,15 +80,16 @@ public class ExtFlightDelaysController {
 	}
 
 	@FXML
-    void doCalcolaAeroportiConnessi(ActionEvent event) {
+    void doCalcolaAeroportiConnessi(ActionEvent event) {	
+		
 		Airport input=cmbBoxAeroportoPartenza.getValue();
-		
-		
-		if(input != null) {
+		if(model.getGrafo().vertexSet().size()== 0 && input == null ) {
+			showAlert("Inserire un numero di compagnie e premere Analizza aeroporti!");
+			
+		}else if(input != null) {
 			
 				String elenco=model.getElencoVicini(input);
-				txtResult.setText(elenco);
-				
+				txtResult.setText(elenco);		
 			
 		}else {
 			showAlert("Selezionare un aeroporto");
