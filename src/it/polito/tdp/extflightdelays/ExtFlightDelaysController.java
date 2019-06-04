@@ -7,13 +7,16 @@ package it.polito.tdp.extflightdelays;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import it.polito.tdp.extflightdelays.model.Airport;
 import it.polito.tdp.extflightdelays.model.Model;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
 
 public class ExtFlightDelaysController {
 
@@ -35,7 +38,7 @@ public class ExtFlightDelaysController {
     private Button btnAnalizza; // Value injected by FXMLLoader
 
     @FXML // fx:id="cmbBoxAeroportoPartenza"
-    private ComboBox<?> cmbBoxAeroportoPartenza; // Value injected by FXMLLoader
+    private ComboBox<Airport> cmbBoxAeroportoPartenza; // Value injected by FXMLLoader
 
     @FXML // fx:id="btnAeroportiConnessi"
     private Button btnAeroportiConnessi; // Value injected by FXMLLoader
@@ -51,13 +54,51 @@ public class ExtFlightDelaysController {
 
     @FXML
     void doAnalizzaAeroporti(ActionEvent event) {
+    	
+    	String numCompagnie=compagnieMinimo.getText();
+    	if(numCompagnie!= null && !numCompagnie.isEmpty()) {
+    		if(model.isValid(numCompagnie)) {
+	    		model.creaGrafo(numCompagnie);
+	    		cmbBoxAeroportoPartenza.getItems().addAll(model.getGrafo().vertexSet());
+	    		txtResult.setText("Grafo creato! Scegliere un Aeroporto dal menù a tendina.");
+			} else {
+				ShowAlert("Inserire un valore numerico");
+			}
+		} else {
+			ShowAlert("Inserire un numero di compagnie!");
+		}
+	}
 
-    }
+    private void ShowAlert(String message) {
+    	Alert alert = new Alert(AlertType.ERROR);
+		alert.setContentText(message);
+		alert.show();
 
-    @FXML
+	}
+
+	@FXML
     void doCalcolaAeroportiConnessi(ActionEvent event) {
+		txtResult.clear();
+		Airport input=cmbBoxAeroportoPartenza.getValue();
+		
+		String numCompagnie = compagnieMinimo.getText();
+		if (numCompagnie != null && !numCompagnie.isEmpty()) {
+			if (model.isValid(numCompagnie)) {
+				if (input != null) {
+					String elenco = model.getConnessi(input, numCompagnie);
+					txtResult.setText(elenco);
+				} else {
+					ShowAlert("Selezionare un Aeroporto!");
+				}
 
-    }
+			} else {
+				ShowAlert("Inserire un valore numerico");
+			}
+		} else {
+			ShowAlert("Inserire un numero di compagnie!");
+		}
+
+	}
 
     @FXML
     void doCercaItinerario(ActionEvent event) {
