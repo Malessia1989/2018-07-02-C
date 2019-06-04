@@ -24,10 +24,7 @@ public class Model {
 		dao= new ExtFlightDelaysDAO();
 		dao.loadAllAirports(idMap); 
 		
-	}
-	
-	
-	
+	}	
 
 	public void creaGrafo(String numCompagnie) {
 		grafo = new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
@@ -42,6 +39,7 @@ public class Model {
 			if (edge == null) {
 				Graphs.addEdge(grafo, r.getPartenza(), r.getArrivo(), r.getPeso());
 			} else {
+								
 				grafo.setEdgeWeight(edge, r.getPeso());
 			}
 		}
@@ -88,7 +86,7 @@ public class Model {
 		
 		String result="";
 		for(Airport a: vicini) {
-			DefaultWeightedEdge edge= grafo.getEdge(input, a);
+			DefaultWeightedEdge edge= grafo.getEdge( a,input);
 			double peso= grafo.getEdgeWeight(edge);
 			result+= a.getAirportName() + " "+ peso+ "\n";
 		}
