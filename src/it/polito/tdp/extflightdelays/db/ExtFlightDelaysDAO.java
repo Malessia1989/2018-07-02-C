@@ -102,7 +102,7 @@ public class ExtFlightDelaysDAO {
 		String sql="select f1.ORIGIN_AIRPORT_ID as partenza, f1.DESTINATION_AIRPORT_ID as arrivo , count(*) peso " + 
 				"from flights f1 " + 
 				"group by f1.ORIGIN_AIRPORT_ID, f1.DESTINATION_AIRPORT_ID " + 
-				"having count(distinct f1.AIRLINE_ID) > ? ";
+				"having count(distinct f1.AIRLINE_ID) >= ? ";
 		
 		List<Rotta> result= new ArrayList<>();
 		try {
